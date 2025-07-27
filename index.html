@@ -1,64 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>BirthDate to Bitcoin Address</title>
+<!DOCTYPE html><html><head>…</head><body>
+  <!-- input, tombol dll -->
+  …
+  <!-- semua library + kode utama ditaruh sini -->
   <script src="https://cdn.jsdelivr.net/npm/bitcoinjs-lib@6.1.0/index.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-  <style>
-    body { font-family: sans-serif; text-align: center; padding: 2em; background: #0e0e0e; color: white; }
-    input { padding: 0.5em; font-size: 1.1em; width: 250px; border-radius: 8px; }
-    button { padding: 0.6em 1.5em; font-size: 1em; margin-top: 1em; border-radius: 8px; cursor: pointer; }
-    .output { margin-top: 2em; }
-    .social { margin-top: 2em; }
-  </style>
-</head>
-<body>
-  <h1>🎂 Convert Tanggal Lahir ke Bitcoin Address</h1>
-  <input id="dob" placeholder="Contoh: 31-12-1999" />
-  <br>
-  <button onclick="generate()">Generate</button>
-
-  <div class="output" id="output"></div>
-
-  <div class="social">
-    <p>Ikuti saya di:</p>
-    <a href="https://t.me/nurohman09" target="_blank">Telegram</a> |
-    <a href="https://x.com/nurihman01" target="_blank">X (Twitter)</a>
-  </div>
-
-  <div style="margin-top: 2em;">
-    <p>Donasi BTC ke: <strong>1YoctoKk2z...g1Terbaik</strong></p>
-  </div>
-
   <script>
-    function generate() {
-      const input = document.getElementById("dob").value.trim();
-      if (!input) return alert("Masukkan tanggal lahir dulu!");
-
-      // Ubah input ke entropi (hash dari tanggal lahir)
-      const hash = bitcoin.crypto.sha256(Buffer.from(input));
-      const keyPair = bitcoin.ECPair.fromPrivateKey(hash);
-
-      const { address } = bitcoin.payments.p2pkh({ pubkey: keyPair.publicKey });
-      const wif = keyPair.toWIF();
-
-      document.getElementById("output").innerHTML = `
-        <p><strong>Alamat BTC:</strong> ${address}</p>
-        <p><strong>Private Key (WIF):</strong> ${wif}</p>
-        <canvas id="qr"></canvas>
-      `;
-
-      // Buat QR Code
-      QRCode.toCanvas(document.getElementById('qr'), address, { width: 200 }, function (error) {
-        if (error) console.error(error);
+    document.addEventListener("DOMContentLoaded", function () {
+      document.getElementById("dob").addEventListener("keydown", e => {
+        if (e.key === "Enter") generate();
       });
-    }
-
-    // Bisa tekan Enter juga
-    document.getElementById("dob").addEventListener("keydown", function (e) {
-      if (e.key === "Enter") generate();
     });
+    function generate() { … }
   </script>
-</body>
-</html>
+</body></html>
