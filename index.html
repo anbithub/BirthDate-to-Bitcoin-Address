@@ -1,69 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>HEX64 → Bitcoin Address</title>
-  <script src="https://cdn.jsdelivr.net/npm/bitcoinjs-lib@6.1.0/index.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-  <style>
-    body {
-      font-family: sans-serif;
-      background: #0f0f0f;
-      color: #ffffff;
-      text-align: center;
-      padding: 2em;
-    }
-    input, textarea {
-      font-family: monospace;
-      font-size: 1em;
-      padding: 0.5em;
-      width: 90%;
-      max-width: 500px;
-      border-radius: 8px;
-      border: none;
-      margin-top: 1em;
-    }
-    .output {
-      margin-top: 2em;
-    }
-  </style>
-</head>
-<body>
-  <h1>🔐 HEX64 to Bitcoin Address</h1>
-  <p>Masukkan Private Key (64 karakter HEX):</p>
-  <textarea id="hexInput" rows="3" placeholder="Contoh: e8f32e723decf4051aefac8e6cbe99..." oninput="updateAddress()"></textarea>
+<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+<script>
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer();
+  renderer.setSize(innerWidth, innerHeight);
+  document.body.appendChild(renderer.domElement);
 
-  <div class="output" id="output"></div>
+  const geometry = new THREE.BoxGeometry();
+  const material = new THREE.MeshStandardMaterial({ color: 0x00ffcc });
+  const cube = new THREE.Mesh(geometry, material);
+  scene.add(cube);
 
-  <script>
-    function updateAddress() {
-      const hex = document.getElementById("hexInput").value.trim();
+  const light = new THREE.PointLight(0xffffff, 1);
+  light.position.set(10, 10, 10);
+  scene.add(light);
 
-      if (!/^[0-9a-fA-F]{64}$/.test(hex)) {
-        document.getElementById("output").innerHTML = "<p>⚠️ Masukkan tepat 64 karakter HEX.</p>";
-        return;
-      }
-
-      try {
-        const privateKeyBuffer = Buffer.from(hex, 'hex');
-        const keyPair = bitcoin.ECPair.fromPrivateKey(privateKeyBuffer);
-        const { address } = bitcoin.payments.p2pkh({ pubkey: keyPair.publicKey });
-        const wif = keyPair.toWIF();
-
-        document.getElementById("output").innerHTML = `
-          <p><strong>Address (P2PKH):</strong><br> ${address}</p>
-          <p><strong>Private Key (WIF):</strong><br> ${wif}</p>
-          <canvas id="qr"></canvas>
-        `;
-
-        QRCode.toCanvas(document.getElementById("qr"), address, { width: 200 }, function (error) {
-          if (error) console.error(error);
-        });
-
-      } catch (e) {
-        document.getElementById("output").innerHTML = "<p>❌ HEX tidak valid sebagai private key</p>";
-      }
-    }
-  </script>
-</body>
-</html>
+  camera.position.z = 5;
+  function animate() {
+    requestAnimationFrame(animate);
+    cube.rotation.x += 0.01;
+    cube.rotation.y += 0.01;
+    renderer.render(scene, camera);
+  }
+  animate();
+</script>
